@@ -1,154 +1,59 @@
-/*
-
-File Allocation Methods: Indexed Allocation
-
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <time.h>
-
+#define max 100
 struct file
 {
-    char name[20];
-    int no_of_blocks;
-    int index;
-    int blocks[20];
-} files[20];
-
-// Stores number of total blocks
-int total_blocks;
-// Stores number of remaining blocks as they are allocated to files
-int remaining_blocks;
-// Stores the file count
-int file_count = 0;
-// Generating block numbers which are used for random selection (1 - block available, 0 - unavailable)
-int avail_blcks[100];
-
-void create()
-{
-    int count, rand_block;
-
-    printf("Enter file name: ");
-    scanf("%s", files[file_count].name);
-
-    printf("Enter no. of blocks: ");
-    scanf("%d", &files[file_count].no_of_blocks);
-
-    // If nob > remaining blocks available
-    if (files[file_count].no_of_blocks > remaining_blocks)
-    {
-        printf("Not enough blocks available.\n");
-        return;
-    }
-    else
-    {
-        count = 0;
-
-        do
-        {
-            // Generate a random block
-            rand_block = rand() % total_blocks;
-
-            // If block status is set as available
-            if (avail_blcks[rand_block] != 0)
-            {
-                // If index block is not allocated
-                if (files[file_count].index == -1)
-                {
-                    files[file_count].index = rand_block;
-                    avail_blcks[rand_block] = 0;
-                    remaining_blocks--;
-                    continue;
-                }
-
-                files[file_count].blocks[count] = rand_block;
-                count++;
-                avail_blcks[rand_block] = 0;
-                remaining_blocks--;
-            }
-        } while (count < files[file_count].no_of_blocks);
-    }
-}
-
-void display()
-{
-    printf("-------------------------------------------------------\n");
-    printf("File Details:\n");
-    printf("%-20s%-15s%-20s%-20s\n", "Name of File", "No. of Blocks", "Index Block No.", "Blocks Allocated");
-    printf("-------------------------------------------------------\n");
-
-    for (int i = 0; i < file_count; i++) {
-        printf("%-20s%-15d", files[i].name, files[i].no_of_blocks);
-
-        if (files[i].index == -1) {
-            printf("%-20s%-20s\n", "Not Allocated", "Not Allocated");
-        } else {
-            printf("%-20d", files[i].index);
-
-            if (files[i].no_of_blocks > 0) {
-                printf("%d", files[i].blocks[0]);
-                for (int j = 1; j < files[i].no_of_blocks; j++) {
-                    printf(", %d", files[i].blocks[j]);
-                }
-            }
-
-            printf("\n");
-        }
-    }
-
-    printf("-------------------------------------------------------\n");
-    printf("Remaining blocks: %d\n", remaining_blocks);
-}
-
+    int no_of_blocks, length, start_address;
+    int blocks[max];
+} f[max];
 int main()
 {
-    int choice;
-
-    srand(time(NULL));
-    printf("Enter total no. of blocks: ");
-    scanf("%d", &total_blocks);
-
-    remaining_blocks = total_blocks;
-
-    for (int i = 0; i < 20; i++)
+    int n;
+    printf("Enter the number of files to be added: \n");
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++)
     {
-        for (int j = 0; j < 20; j++)
+        printf("Enter the start address of file[%d]: \n", i);
+        scanf("%d", &f[i].start_address);
+        printf("Enter the length of the file[%d]: \n", i);
+        scanf("%d", &f[i].length);
+        printf("Enter the number of blocks of file[%d]: \n", i);
+        scanf("%d", &f[i].no_of_blocks);
+        printf("Enter the blocks allocated: \n");
+        for (int j = 0; j < f[i].no_of_blocks; j++)
         {
-            files[i].blocks[j] = -1;
-            files[i].index = -1;
+            scanf("%d", &f[i].blocks[j]);
         }
     }
-
-    // Generating block numbers which are used for random selection (1 - block available, 0 - unavailable)
-    for (int i = 0; i < total_blocks; i++)
-        avail_blcks[i] = 1;
-
-    do
+    for (int i = 0; i < n; i++)
     {
-        printf("\tMENU\n");
-        printf("1. Create file\n2. Display files\n3. Exit\nEnter choice: ");
-        scanf("%d", &choice);
-
-        switch (choice)
+        printf("file no: %d\tno of blocks: %d\tlength:%d\tstart addr:%d\n", i, f[i].no_of_blocks, f[i].length, f[i].start_address);
+    }
+    int state = 0;
+    while (state == 0)
+    {
+        int ch;
+        printf("1.Get the blocks 2. exit");
+        scanf("%d", &ch);
+        switch (ch)
         {
         case 1:
-            if (remaining_blocks == 0)
+        {
+            printf("Enter the file number: \n");
+            int m;
+            scanf("%d", &m);
+            printf("Blocks allocated: ");
+            for (int i = 0; i < f[m].no_of_blocks; i++)
             {
-                printf("All blocks are allocated.\n");
-                break;
+                printf("%d\t", f[m].blocks[i]);
             }
-            create();
-            file_count++;
-            display();
-            break;
-        case 2:
-            display();
             break;
         }
-    } while (choice >= 1 && choice <= 2);
-
-    return 0;
+        case 2:
+        {
+            state = 1;
+            break;
+        }
+        }
+    }
 }
-
