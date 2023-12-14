@@ -29,8 +29,7 @@ void passOne(char label[10], char opcode[10], char operand[10], char code[10], c
 {
     int locctr, start, length;
 
-    FILE *fp1, *fp2, *fp3, *fp4, *fp5;                                    // file pointers
-
+    FILE *fp1, *fp2, *fp3, *fp4, *fp5;                                   
     // read mode
     fp1 = fopen("input.txt", "r");
     fp2 = fopen("optab.txt", "r");
@@ -39,14 +38,14 @@ void passOne(char label[10], char opcode[10], char operand[10], char code[10], c
     fp4 = fopen("intermediate.txt", "w");
     fp5 = fopen("length.txt", "w");
 
-    fscanf(fp1, "%s\t%s\t%s", label, opcode, operand);              // read first line
+    fscanf(fp1, "%s\t%s\t%s", label, opcode, operand);            
 
     if (strcmp(opcode, "START") == 0) {                       
         // atoi() requires stdlib.h header file , it converts ASCII to integer
-        start = atoi(operand);                                      // convert operand value from string to integer and assign to start
+        start = atoi(operand);                                     
         locctr = start;
-        fprintf(fp4, "\t%s\t%s\t%s\n", label, opcode, operand);     // write to output file (additional tab space as start will not have any locctr)
-        fscanf(fp1, "%s\t%s\t%s", label, opcode, operand);          // read next line
+        fprintf(fp4, "\t%s\t%s\t%s\n", label, opcode, operand);     
+        fscanf(fp1, "%s\t%s\t%s", label, opcode, operand);          
     } 
     else {
         locctr = 0;
@@ -68,7 +67,7 @@ void passOne(char label[10], char opcode[10], char operand[10], char code[10], c
 
         // 4. traverse till the end of optab file
         while (strcmp(code, "END") != 0) {
-            if (strcmp(opcode, code) == 0) {                        // if opcode in input matches the one in optab, increment locctr by 3
+            if (strcmp(opcode, code) == 0) {                        
                 locctr += 3;
                 break;
             }
@@ -84,7 +83,7 @@ void passOne(char label[10], char opcode[10], char operand[10], char code[10], c
         }
                 // RESW -> add 3*operand to locctr
         else if (strcmp(opcode, "RESW") == 0) {
-            locctr += (3 * (atoi(operand)));                        // convert operand to integer and multiply with 3
+            locctr += (3 * (atoi(operand)));                       
         }
                 // BYTE -> add 1 to locctr 
         else if (strcmp(opcode, "BYTE") == 0) {

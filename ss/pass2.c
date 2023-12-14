@@ -9,9 +9,7 @@ Must Compile and Execute 'pass1.c' before executing this
 
 void display();
 
-// itoa manual implementation as its not ANSI Standard
-//start of itoa block
-// Function to swap two numbers
+
 void swap(char *x, char *y) {
     char t = *x; *x = *y; *y = t;
 }
@@ -57,9 +55,7 @@ char* itoa(int value, char* buffer, int base)
         buffer[i++] = '0';
     }
  
-    // If the base is 10 and the value is negative, the resulting string
-    // is preceded with a minus sign (-)
-    // With any other base, value is always considered unsigned
+   
     if (value < 0 && base == 10) {
         buffer[i++] = '-';
     }
@@ -75,8 +71,8 @@ int main()
 {
     char a[10], ad[10], label[10], opcode[10], operand[10], symbol[10];
     int start, diff, i, address, add, len, actual_len, finaddr, prevaddr, j = 0;
-    char mnemonic[15][15] = {"LDA", "STA", "LDCH", "STCH"};
-    char code[15][15] = {"33", "44", "53", "57"};
+    char mnemonic[15][15] = {"LDA", "STA", "LDCH", "STCH","MUL"};
+    char code[15][15] = {"33", "44", "53", "57","20"};
 
     FILE *fp1, *fp2, *fp3, *fp4;
     fp1 = fopen("output.txt", "w");
